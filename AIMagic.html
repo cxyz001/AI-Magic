@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Magic - 创意内容生成工具</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <h1>AI Magic</h1>
+                <p>创意内容生成工具</p>
+            </div>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="text-to-image">文生图</button>
+            <button class="tab-btn" data-tab="image-to-video">图生视频</button>
+            <button class="tab-btn" data-tab="text-to-video">文生视频</button>
+        </nav>
+
+        <main>
+            <!-- 文生图 功能 -->
+            <section id="text-to-image" class="tab-content active">
+                <h2>文生图</h2>
+                <p class="feature-desc">通过文字描述生成图像，AI Magic将创建4副符合您描述的图片。</p>
+                
+                <div class="input-area">
+                    <textarea id="text-to-image-input" placeholder="请输入详细的图像描述，例如：'一只金色的猫站在月光下的神秘森林中，树木高耸，星空闪烁'"></textarea>
+                    
+                    <div class="options">
+                        <div class="option-group">
+                            <label>风格</label>
+                            <select id="image-style">
+                                <option value="realistic">写实风格</option>
+                                <option value="cartoon">卡通风格</option>
+                                <option value="painting">油画风格</option>
+                                <option value="sketch">素描风格</option>
+                                <option value="anime">动漫风格</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button id="generate-image-btn" class="generate-btn">
+                        <i class="fas fa-magic"></i> 生成图片
+                    </button>
+                </div>
+
+                <div id="image-loading" class="loading-indicator hidden">
+                    <div class="spinner"></div>
+                    <p>正在创作精美图像，请稍候...</p>
+                </div>
+                
+                <div id="image-results" class="results-grid hidden">
+                    <div class="result-item">
+                        <div class="image-container">
+                            <img src="" alt="生成的图像">
+                        </div>
+                        <button class="download-btn"><i class="fas fa-download"></i> 下载</button>
+                    </div>
+                    <div class="result-item">
+                        <div class="image-container">
+                            <img src="" alt="生成的图像">
+                        </div>
+                        <button class="download-btn"><i class="fas fa-download"></i> 下载</button>
+                    </div>
+                    <div class="result-item">
+                        <div class="image-container">
+                            <img src="" alt="生成的图像">
+                        </div>
+                        <button class="download-btn"><i class="fas fa-download"></i> 下载</button>
+                    </div>
+                    <div class="result-item">
+                        <div class="image-container">
+                            <img src="" alt="生成的图像">
+                        </div>
+                        <button class="download-btn"><i class="fas fa-download"></i> 下载</button>
+                    </div>
+                    <button id="download-all-images" class="download-all-btn"><i class="fas fa-download"></i> 下载全部图片</button>
+                </div>
+            </section>
+
+            <!-- 图生视频 功能 -->
+            <section id="image-to-video" class="tab-content">
+                <h2>图生视频</h2>
+                <p class="feature-desc">上传图片，AI Magic将为您创建一段精彩视频。</p>
+                
+                <div class="input-area">
+                    <div id="image-upload-area" class="upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>拖放图片到这里或</p>
+                        <input type="file" id="image-upload" accept="image/*" hidden>
+                        <button id="select-image-btn">选择图片</button>
+                        <p class="upload-note">支持: JPG, PNG (最大 5MB)</p>
+                    </div>
+                    
+                    <div id="uploaded-image-preview" class="image-preview hidden">
+                        <img src="" alt="上传的图片">
+                        <button id="change-image-btn">更换图片</button>
+                    </div>
+                    
+                    <div class="options">
+                        <div class="option-group">
+                            <label>视频效果</label>
+                            <select id="video-effect">
+                                <option value="zoom">缓慢缩放</option>
+                                <option value="pan">平移效果</option>
+                                <option value="3d">3D深度效果</option>
+                                <option value="animate">动画效果</option>
+                            </select>
+                        </div>
+                        
+                        <div class="option-group">
+                            <label>视频长度</label>
+                            <select id="video-length">
+                                <option value="3">3秒</option>
+                                <option value="5" selected>5秒</option>
+                                <option value="10">10秒</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button id="generate-video-from-image-btn" class="generate-btn" disabled>
+                        <i class="fas fa-film"></i> 生成视频
+                    </button>
+                </div>
+
+                <div id="video-from-image-loading" class="loading-indicator hidden">
+                    <div class="spinner"></div>
+                    <p>正在处理您的视频，请稍候...</p>
+                    <div class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
+                    <p class="progress-text">0%</p>
+                </div>
+                
+                <div id="video-from-image-result" class="video-result hidden">
+                    <div class="video-container">
+                        <video controls></video>
+                    </div>
+                    <div class="video-actions">
+                        <button id="download-video-from-image" class="download-btn"><i class="fas fa-download"></i> 下载视频</button>
+                        <div class="format-selector">
+                            <label>格式:</label>
+                            <select id="video-from-image-format">
+                                <option value="mp4">MP4</option>
+                                <option value="webm">WebM</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 文生视频 功能 -->
+            <section id="text-to-video" class="tab-content">
+                <h2>文生视频</h2>
+                <p class="feature-desc">通过文字描述生成视频，AI Magic将为您创建一段生动的视频内容。</p>
+                
+                <div class="input-area">
+                    <textarea id="text-to-video-input" placeholder="请输入详细的视频描述，例如：'宇航员在火星表面行走，发现了奇特的蓝色水晶结构'"></textarea>
+                    
+                    <div class="options">
+                        <div class="option-group">
+                            <label>风格</label>
+                            <select id="video-style">
+                                <option value="realistic">写实风格</option>
+                                <option value="cinematic">电影风格</option>
+                                <option value="cartoon">卡通风格</option>
+                                <option value="anime">动漫风格</option>
+                            </select>
+                        </div>
+                        
+                        <div class="option-group">
+                            <label>视频长度</label>
+                            <select id="text-to-video-length">
+                                <option value="5">5秒</option>
+                                <option value="10" selected>10秒</option>
+                                <option value="15">15秒</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button id="generate-video-from-text-btn" class="generate-btn">
+                        <i class="fas fa-film"></i> 生成视频
+                    </button>
+                </div>
+
+                <div id="video-from-text-loading" class="loading-indicator hidden">
+                    <div class="spinner"></div>
+                    <p>正在创作您的视频，这可能需要几分钟时间...</p>
+                    <div class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
+                    <p class="progress-text">0%</p>
+                    <p class="eta">预计完成时间: 约2分钟</p>
+                </div>
+                
+                <div id="video-from-text-result" class="video-result hidden">
+                    <div class="video-container">
+                        <video controls></video>
+                    </div>
+                    <div class="video-actions">
+                        <button id="download-video-from-text" class="download-btn"><i class="fas fa-download"></i> 下载视频</button>
+                        <div class="format-selector">
+                            <label>格式:</label>
+                            <select id="video-from-text-format">
+                                <option value="mp4">MP4</option>
+                                <option value="webm">WebM</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>© 2025 AI Magic | 人工智能创意生成工具</p>
+            <div class="footer-links">
+                <a href="#" id="about-link">关于我们</a>
+                <a href="#" id="help-link">使用帮助</a>
+            </div>
+        </footer>
+    </div>
+
+    <!-- 关于弹窗 -->
+    <div id="about-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>关于 AI Magic</h2>
+            <p>AI Magic是一款基于先进人工智能技术的创意内容生成工具。通过简单的文字描述或上传图片，即可生成高质量的图像和视频内容。</p>
+            <p>无需专业设计技能，人人都能轻松创作。</p>
+        </div>
+    </div>
+
+    <!-- 帮助弹窗 -->
+    <div id="help-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>使用帮助</h2>
+            <h3>文生图</h3>
+            <p>输入详细的文字描述，点击"生成图片"按钮，系统将创建4副符合描述的图片。生成后可单独下载或一键下载全部图片。</p>
+            
+            <h3>图生视频</h3>
+            <p>上传一张图片，选择需要的视频效果和长度，点击"生成视频"，系统将创建一段动态视频。生成后可预览并下载。</p>
+            
+            <h3>文生视频</h3>
+            <p>输入详细的视频内容描述，选择风格和长度，点击"生成视频"，系统将直接创建符合描述的视频内容。生成时间较长，请耐心等待。</p>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/mockApi.js"></script>
+</body>
+</html>
